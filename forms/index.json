@@ -1,0 +1,10 @@
+{
+  "forms": [
+    { "id": "dltv01", "code": "DLTV-01", "file": "forms/dltv01.json", "title": "ประเมินคุณภาพโรงเรียน (โรงเรียน)", "scope": "school" },
+    { "id": "dltv02", "code": "DLTV-02", "file": "forms/dltv02.json", "title": "ประเมินคุณภาพ (ครูปลายทาง)", "scope": "teacher" },
+    { "id": "dltv03", "code": "DLTV-03", "file": "forms/dltv03.json", "title": "สำรวจการจัดการเรียนรู้ (ครูปลายทาง)", "scope": "teacher" },
+    { "id": "dltv04", "code": "DLTV-04", "file": "forms/dltv04.json", "title": "สำรวจการบริหารจัดการ (ผู้บริหาร)", "scope": "school" },
+    { "id": "dltv05", "code": "DLTV-05", "file": "forms/dltv05.json", "title": "ประเมินครูห้องเรียนต้นทาง", "scope": "teacher" },
+    { "id": "dltv06", "code": "DLTV-06", "file": "forms/dltv06.json", "title": "ครูต้นทางประเมินตนเอง", "scope": "origin" }
+  ]
+}
