@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ย้ายข้อมูลนักเรียนเข้า Firestore — ใช้ครั้งเดียว</title>
+<style>
+  body{font-family:'Sarabun',sans-serif;background:#F0F2F8;max-width:640px;margin:40px auto;padding:0 16px;color:#1A1D2E}
+  .card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:16px}
+  h1{font-size:20px} h2{font-size:16px;margin-top:0}
+  input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin:6px 0;box-sizing:border-box}
+  button{background:#2563EB;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:15px}
+  button:disabled{background:#9BA3BC;cursor:not-allowed}
+  #log{background:#1A1D2E;color:#9fefb0;font-family:monospace;font-size:13px;padding:12px;border-radius:8px;height:240px;overflow:auto;white-space:pre-wrap}
+  #log .err{color:#ff8f8f}
+  .warn{background:#FEF3C7;border:1px solid #f0d47a;border-radius:8px;padding:12px;font-size:14px}
+</style>
+</head>
+<body>
+<h1>🔄 ย้ายข้อมูลนักเรียน 72 คน เข้า Cloud Firestore</h1>
+
+<div class="warn">
+  ⚠️ ก่อนใช้งาน ต้องทำใน Firebase Console ให้ครบก่อน (ขั้นตอนเต็มใน README.md):
+  <ol style="margin:8px 0 0;padding-left:20px">
+    <li>ใส่ค่า config จริงใน <code>firebase-config.js</code></li>
+    <li>เปิด Firestore Database และ Authentication (Email/Password)</li>
+    <li>สร้างบัญชีผู้ใช้ใน Authentication → Users → Add user</li>
+    <li>ติดตั้ง Security Rules ตามไฟล์ <code>firestore.rules</code> แล้วกด Publish</li>
+  </ol>
+</div>
+
+<div class="card">
+  <h2>1) ล็อกอิน</h2>
+  <input id="email" type="email" placeholder="อีเมล (ที่สร้างไว้ใน Firebase Authentication)">
+  <input id="password" type="password" placeholder="รหัสผ่าน">
+  <button id="btn-login">เข้าสู่ระบบ</button>
+  <span id="auth-status" style="margin-left:10px;font-size:14px;color:#5A6178">ยังไม่ได้ล็อกอิน</span>
+</div>
+
+<div class="card">
+  <h2>2) เริ่มย้ายข้อมูล</h2>
+  <p style="font-size:14px;color:#5A6178">
+    ระบบจะอ่านข้อมูลจาก <code>js/01-data.js</code> (RAW ทั้ง 72 คน)
+    แล้วเขียนเข้า collection <code>students</code> โดยใช้เลขบัตร ปชช. เป็น document id
+    — รันซ้ำได้ ไม่สร้างข้อมูลซ้ำ (merge)
+  </p>
+  <button id="btn-migrate" disabled>🚀 เริ่มย้ายข้อมูล</button>
+</div>
+
+<div class="card">
+  <h2>บันทึกการทำงาน</h2>
+  <div id="log"></div>
+</div>
+
+<!-- ข้อมูลนักเรียน + config (script ธรรมดา) -->
+<script src="../js/01-data.js"></script>
+<script src="firebase-config.js"></script>
+
+<!-- Firebase compat SDK: โหลดแบบ script ธรรมดา ใช้ได้แม้เปิดไฟล์ตรงๆ (file://) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+/* ---------- เครื่องมือ log + ดักจับ error ทุกชนิดมาแสดงในหน้า ---------- */
+const logEl = document.getElementById('log');
+function log(msg, isErr) {
+  const line = document.createElement('div');
+  if (isErr) line.className = 'err';
+  line.textContent = msg;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+window.addEventListener('error', e => {
+  log('❌ JS Error: ' + (e.message || e.type) + (e.filename ? ' @ ' + e.filename.split('/').pop() : ''), true);
+});
+window.addEventListener('unhandledrejection', e => {
+  log('❌ Promise Error: ' + (e.reason && e.reason.message ? e.reason.message : e.reason), true);
+});
+
+/* ---------- ตรวจความพร้อมของระบบ (self-diagnostics) ---------- */
+let ready = true;
+
+if (typeof firebase === 'undefined') {
+  log('❌ โหลด Firebase SDK ไม่ได้ — ตรวจการเชื่อมต่ออินเทอร์เน็ต', true);
+  ready = false;
+} else {
+  log('✓ โหลด Firebase SDK สำเร็จ (v' + firebase.SDK_VERSION + ')');
+}
+
+if (typeof RAW === 'undefined' || !Array.isArray(RAW)) {
+  log('❌ ไม่พบข้อมูลนักเรียน — ตรวจว่าไฟล์ ../js/01-data.js อยู่ครบตามโครงสร้างโฟลเดอร์เดิม', true);
+  ready = false;
+} else {
+  log('✓ พบข้อมูลนักเรียน ' + RAW.length + ' คน');
+}
+
+if (!window.FIREBASE_CONFIG) {
+  log('❌ ไม่พบ FIREBASE_CONFIG — ตรวจไฟล์ firebase-config.js', true);
+  ready = false;
+} else if (String(window.FIREBASE_CONFIG.apiKey).indexOf('ใส่ค่า') !== -1
+        || window.FIREBASE_CONFIG.projectId === 'your-project-id') {
+  log('❌ firebase-config.js ยังเป็นค่าตัวอย่าง — กรุณาวางค่า config จริงจาก Firebase Console ก่อน', true);
+  log('   (Project Overview → ไอคอน </> → คัดลอก firebaseConfig)', true);
+  ready = false;
+} else {
+  log('✓ พบ config โปรเจกต์: ' + window.FIREBASE_CONFIG.projectId);
+}
+
+let auth = null, db = null;
+if (ready) {
+  try {
+    firebase.initializeApp(window.FIREBASE_CONFIG);
+    auth = firebase.auth();
+    db   = firebase.firestore();
+    log('✓ เชื่อมต่อ Firebase สำเร็จ');
+    log('พร้อมทำงาน — กรุณาล็อกอิน');
+  } catch (e) {
+    log('❌ เชื่อมต่อ Firebase ไม่สำเร็จ: ' + e.message, true);
+    ready = false;
+  }
+}
+
+/* ---------- ผูกปุ่มทันที (ไม่ต้องรออะไร) ---------- */
+const btnLogin = document.getElementById('btn-login');
+const btnMig   = document.getElementById('btn-migrate');
+const status   = document.getElementById('auth-status');
+
+if (auth) {
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      status.textContent = '✅ ล็อกอินแล้ว: ' + user.email;
+      btnMig.disabled = false;
+    } else {
+      status.textContent = 'ยังไม่ได้ล็อกอิน';
+      btnMig.disabled = true;
+    }
+  });
+}
+
+btnLogin.onclick = async () => {
+  if (!ready || !auth) { log('⚠️ ระบบยังไม่พร้อม — แก้ปัญหาที่ขึ้น ❌ ด้านบนก่อน', true); return; }
+  const email = document.getElementById('email').value.trim();
+  const pass  = document.getElementById('password').value;
+  if (!email || !pass) { log('⚠️ กรอกอีเมลและรหัสผ่านก่อน', true); return; }
+  btnLogin.disabled = true;
+  log('กำลังล็อกอิน...');
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+    log('✅ ล็อกอินสำเร็จ');
+  } catch (e) {
+    const hint = {
+      'auth/invalid-credential':      'อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือยังไม่ได้สร้างผู้ใช้นี้ใน Authentication → Users',
+      'auth/user-not-found':          'ไม่พบผู้ใช้นี้ — สร้างใน Firebase Console → Authentication → Users → Add user',
+      'auth/wrong-password':          'รหัสผ่านไม่ถูกต้อง',
+      'auth/operation-not-allowed':   'ยังไม่ได้เปิด Email/Password ใน Authentication → Sign-in method',
+      'auth/invalid-api-key':         'apiKey ใน firebase-config.js ไม่ถูกต้อง',
+      'auth/network-request-failed':  'เชื่อมต่ออินเทอร์เน็ตไม่ได้',
+    }[e.code] || '';
+    log('❌ ล็อกอินไม่สำเร็จ [' + (e.code || '') + '] ' + e.message, true);
+    if (hint) log('   💡 ' + hint, true);
+  } finally {
+    btnLogin.disabled = false;
+  }
+};
+
+btnMig.onclick = async () => {
+  if (!db) return;
+  btnMig.disabled = true;
+  log('เริ่มอัปโหลดข้อมูล ' + RAW.length + ' คน...');
+  try {
+    let done = 0;
+    for (const s of RAW) {
+      if (!s.id) { log('  ข้าม: ไม่มีเลขบัตร ปชช. → ' + (s.name || '?'), true); continue; }
+      const clean = JSON.parse(JSON.stringify(s));
+      clean._updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('students').doc(String(s.id)).set(clean, { merge: true });
+      done++;
+      log('  (' + done + '/' + RAW.length + ') ' + s.name);
+    }
+    log('🎉 ย้ายข้อมูลครบ ' + done + ' คนแล้ว!');
+    log('ตรวจผลได้ที่ Firebase Console → Firestore → collection "students"');
+    log('ขั้นถัดไป: ดู README.md ขั้นที่ 4-5 (สลับแอปหลักเป็น Firestore และลบข้อมูลใน 01-data.js)');
+  } catch (e) {
+    log('❌ เกิดข้อผิดพลาด [' + (e.code || '') + '] ' + e.message, true);
+    if (e.code === 'permission-denied')
+      log('   💡 Security Rules ยังไม่อนุญาต — วางเนื้อหาไฟล์ firestore.rules ใน Firestore → Rules แล้วกด Publish', true);
+  } finally {
+    btnMig.disabled = false;
+  }
+};
+</script>
+</body>
+</html>

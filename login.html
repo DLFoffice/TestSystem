@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เข้าสู่ระบบ — DLTV Fund ระบบติดตามทุนการศึกษา</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F4F6FB; --cream-2:#EEF2F8;
+  --gold:#5D87FF; --gold-deep:#4570EA; --gold-soft:#93AEFF;
+  --ink:#2B2B33; --muted:#8A8F9E; --line:#E9EDF3;
+  --card:#FFFFFF; --err:#DC2626;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Sarabun',sans-serif;color:var(--ink);min-height:100vh;display:flex;
+  background:
+    radial-gradient(900px 500px at 12% -10%, #E3ECFF 0%, transparent 60%),
+    radial-gradient(700px 480px at 95% 110%, #E8F7FF 0%, transparent 55%),
+    linear-gradient(150deg, var(--cream) 0%, var(--cream-2) 100%);
+}
+h1,h2{font-family:'Noto Sans Thai',sans-serif}
+
+/* ================= ฝั่งซ้าย : HERO ================= */
+.hero{flex:1.35;padding:44px 56px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(145deg,var(--gold),var(--gold-deep));
+  color:#fff;font-family:'Noto Sans Thai';font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 16px rgba(93,135,255,.35);letter-spacing:.5px}
+.brand-name{font-family:'Noto Sans Thai';font-weight:800;font-size:19px}
+.brand-sub{font-size:10.5px;letter-spacing:3.5px;color:var(--muted);font-weight:600}
+
+.tagline{margin-top:46px;font-size:13.5px;font-weight:600;color:#B8860B;letter-spacing:.4px}
+.headline{margin-top:10px;font-size:clamp(34px,4.2vw,52px);font-weight:800;line-height:1.18}
+.headline .accent{color:var(--gold-deep)}
+.sub{margin-top:16px;max-width:440px;font-size:15.5px;line-height:1.75;color:#5A5F6E}
+
+/* ---- ภาพประกอบ: ดาวเทียม + จาน + แล็ปท็อป (วาดด้วย CSS/SVG) ---- */
+.scene{position:relative;flex:1;min-height:300px;margin-top:8px}
+.satellite{position:absolute;top:6px;right:12%;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-14px) rotate(-8deg)}}
+.wave{position:absolute;border:2.5px solid var(--gold);border-radius:50%;opacity:0;
+  border-top-color:transparent;border-left-color:transparent;transform:rotate(-135deg);
+  animation:pulse 3s ease-out infinite}
+@keyframes pulse{0%{opacity:.85;width:16px;height:16px}100%{opacity:0;width:110px;height:110px}}
+@media (prefers-reduced-motion: reduce){.satellite,.wave{animation:none}.wave{opacity:.3;width:60px;height:60px}}
+
+.laptop{position:absolute;left:6%;bottom:70px;width:min(430px,56%);filter:drop-shadow(0 22px 34px rgba(120,80,0,.18))}
+.screen{background:#fff;border:10px solid #E8E9EE;border-bottom-width:14px;border-radius:14px 14px 4px 4px;padding:12px}
+.scr-top{display:flex;align-items:center;gap:6px;margin-bottom:9px}
+.scr-logo{width:16px;height:16px;border-radius:4px;background:linear-gradient(145deg,var(--gold),var(--gold-deep))}
+.scr-title{font-size:9px;font-weight:700;font-family:'Noto Sans Thai'}
+.scr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:7px}
+.scr-card{background:#FBF7EF;border-radius:6px;padding:6px}
+.scr-num{font-size:11px;font-weight:800;font-family:'Noto Sans Thai';color:var(--gold-deep)}
+.scr-lbl{font-size:6.5px;color:var(--muted)}
+.scr-chart{display:flex;align-items:flex-end;gap:3px;height:44px;background:#FBF7EF;border-radius:6px;padding:6px}
+.scr-chart i{flex:1;border-radius:2px 2px 0 0;background:linear-gradient(180deg,var(--gold),var(--gold-deep))}
+.base{height:12px;background:linear-gradient(180deg,#F2F3F7,#D9DBE3);border-radius:0 0 16px 16px;margin:0 -26px;
+  box-shadow:0 2px 0 #C8CAD3}
+.dish{position:absolute;right:8%;bottom:86px;width:110px;opacity:.95}
+
+.chips{display:flex;gap:14px;flex-wrap:wrap}
+.chip{flex:1;min-width:180px;background:rgba(255,255,255,.82);backdrop-filter:blur(4px);border:1px solid var(--line);
+  border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 4px 14px rgba(45,55,80,.08)}
+.chip-ic{width:38px;height:38px;border-radius:10px;background:#ECF2FF;display:flex;align-items:center;justify-content:center;font-size:17px}
+.chip b{display:block;font-family:'Noto Sans Thai';font-size:13.5px;font-weight:700}
+.chip span{font-size:11.5px;color:var(--muted)}
+
+/* ================= ฝั่งขวา : LOGIN CARD ================= */
+.panel{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 5%}
+.card{width:min(400px,100%);background:var(--card);border-radius:18px;padding:38px 36px 30px;
+  box-shadow:0 18px 60px rgba(45,55,80,.14), 0 2px 8px rgba(45,55,80,.06)}
+.card-logo{width:74px;height:74px;border-radius:50%;margin:0 auto 14px;border:1px solid var(--line);
+  background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(45,55,80,.12)}
+.card-logo div{width:52px;height:52px;border-radius:10px;background:linear-gradient(145deg,var(--gold),var(--gold-deep));
+  color:#fff;font-family:'Noto Sans Thai';font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+.card h2{text-align:center;font-size:24px;font-weight:800}
+.card .hint{text-align:center;font-size:13.5px;color:var(--muted);margin:6px 0 24px}
+label{display:block;font-size:13.5px;font-weight:600;font-family:'Noto Sans Thai';margin:14px 0 6px}
+.field{position:relative}
+.field input{width:100%;padding:12px 42px 12px 40px;border:1.5px solid #E5E0D4;border-radius:10px;font-size:14.5px;
+  font-family:'Sarabun';background:#FCFBF8;transition:border-color .15s, box-shadow .15s}
+.field input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(93,135,255,.18);background:#fff}
+.field .ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.55}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;
+  padding:7px;font-size:16px;opacity:.6;border-radius:8px}
+.eye:hover{opacity:1;background:#F7F2E6}
+.eye:focus-visible{outline:2px solid var(--gold)}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px}
+.remember{display:flex;gap:7px;align-items:center;color:#5A5F6E;cursor:pointer;user-select:none}
+.remember input{width:16px;height:16px;accent-color:var(--gold-deep);cursor:pointer}
+.forgot{color:var(--gold-deep);font-weight:600;text-decoration:none}
+.forgot:hover{text-decoration:underline}
+.btn{width:100%;margin-top:22px;padding:13px;border:none;border-radius:12px;cursor:pointer;
+  font-family:'Noto Sans Thai';font-size:16px;font-weight:700;color:#fff;
+  background:linear-gradient(90deg,var(--gold) 0%,var(--gold-deep) 100%);
+  box-shadow:0 8px 20px rgba(93,135,255,.35);transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(93,135,255,.42)}
+.btn:disabled{opacity:.65;transform:none;cursor:not-allowed}
+.err{color:var(--err);font-size:13px;margin-top:12px;min-height:19px;text-align:center}
+.foot{border-top:1px solid var(--line);margin-top:22px;padding-top:16px;text-align:center;font-size:12px;color:var(--muted)}
+.foot .contact{margin-bottom:8px;font-size:12.5px}
+.copy{margin-top:22px;text-align:center;font-size:12px;color:#B9AE97}
+
+/* ---- Modal ลืมรหัสผ่าน ---- */
+.modal-bg{position:fixed;inset:0;background:rgba(30,25,10,.45);display:none;align-items:center;justify-content:center;z-index:50}
+.modal-bg.open{display:flex}
+.modal{width:min(380px,92%);background:#fff;border-radius:16px;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h3{font-family:'Noto Sans Thai';font-size:17px;margin-bottom:6px}
+.modal p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+.modal input{width:100%;padding:11px;border:1.5px solid #E5E0D4;border-radius:10px;font-size:14px;font-family:'Sarabun'}
+.modal .actions{display:flex;gap:10px;margin-top:16px}
+.modal .actions button{flex:1;padding:10px;border-radius:10px;font-family:'Noto Sans Thai';font-weight:700;font-size:14px;cursor:pointer}
+.mcancel{border:1.5px solid #E5E0D4;background:#fff;color:#5A5F6E}
+.mok{border:none;background:linear-gradient(90deg,var(--gold),var(--gold-deep));color:#fff}
+.mmsg{font-size:12.5px;margin-top:10px;min-height:17px}
+
+@media (max-width:920px){
+  body{flex-direction:column}
+  .hero{padding:30px 26px 10px}
+  .scene{display:none}
+  .chips{margin-top:24px}
+  .panel{padding:26px 20px 46px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═════════ HERO ซ้าย ═════════ -->
+<section class="hero">
+  <div class="brand">
+    <div class="brand-logo">DLTV</div>
+    <div>
+      <div class="brand-name">DLTV Fund</div>
+      <div class="brand-sub">SCHOLARSHIP MONITORING</div>
+    </div>
+  </div>
+
+  <div class="tagline">มูลนิธิการศึกษาทางไกลผ่านดาวเทียม ในพระบรมราชูปถัมภ์</div>
+  <h1 class="headline">ระบบติดตาม<br>ทุนการศึกษา <span class="accent">DLTV</span></h1>
+  <p class="sub">บริหารจัดการ ติดตาม และรับรองทุนการศึกษานักเรียนทุนทั่วประเทศ
+    ไว้ในที่เดียว — โปร่งใส ตรวจสอบได้ และปลอดภัย</p>
+
+  <div class="scene" aria-hidden="true">
+    <!-- ดาวเทียม + คลื่นสัญญาณ -->
+    <div class="satellite">
+      <svg width="120" height="72" viewBox="0 0 120 72">
+        <rect x="46" y="26" width="28" height="20" rx="4" fill="#E8E9EE" stroke="#C8CAD3" stroke-width="2"/>
+        <rect x="2"  y="30" width="38" height="12" rx="2" fill="#5D87FF" stroke="#D98E12" stroke-width="2"/>
+        <rect x="80" y="30" width="38" height="12" rx="2" fill="#5D87FF" stroke="#D98E12" stroke-width="2"/>
+        <line x1="40" y1="36" x2="46" y2="36" stroke="#C8CAD3" stroke-width="3"/>
+        <line x1="74" y1="36" x2="80" y2="36" stroke="#C8CAD3" stroke-width="3"/>
+        <circle cx="60" cy="52" r="4" fill="#4570EA"/>
+        <line x1="60" y1="46" x2="60" y2="52" stroke="#C8CAD3" stroke-width="2"/>
+      </svg>
+      <div class="wave" style="left:34px;top:56px"></div>
+      <div class="wave" style="left:34px;top:56px;animation-delay:1s"></div>
+      <div class="wave" style="left:34px;top:56px;animation-delay:2s"></div>
+    </div>
+
+    <!-- แล็ปท็อปแดชบอร์ดจำลอง -->
+    <div class="laptop">
+      <div class="screen">
+        <div class="scr-top"><div class="scr-logo"></div><div class="scr-title">DLTV Fund</div></div>
+        <div class="scr-grid">
+          <div class="scr-card"><div class="scr-num">72</div><div class="scr-lbl">นักเรียนทุน</div></div>
+          <div class="scr-card"><div class="scr-num">3.61</div><div class="scr-lbl">GPA เฉลี่ย</div></div>
+          <div class="scr-card"><div class="scr-num">29</div><div class="scr-lbl">จังหวัด</div></div>
+        </div>
+        <div class="scr-chart">
+          <i style="height:35%"></i><i style="height:55%"></i><i style="height:42%"></i><i style="height:70%"></i>
+          <i style="height:58%"></i><i style="height:82%"></i><i style="height:66%"></i><i style="height:92%"></i>
+        </div>
+      </div>
+      <div class="base"></div>
+    </div>
+
+    <!-- จานดาวเทียม -->
+    <svg class="dish" viewBox="0 0 110 90" aria-hidden="true">
+      <ellipse cx="48" cy="38" rx="34" ry="26" fill="#fff" stroke="#D9DBE3" stroke-width="3" transform="rotate(-28 48 38)"/>
+      <line x1="48" y1="38" x2="72" y2="16" stroke="#C8CAD3" stroke-width="3"/>
+      <circle cx="72" cy="16" r="4" fill="#5D87FF"/>
+      <path d="M52 60 L60 86 M60 86 L44 86 M60 86 L76 86" stroke="#C8CAD3" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><div class="chip-ic">🛡️</div><div><b>ปลอดภัยสูงสุด</b><span>เข้ารหัสข้อมูลทุกชั้น มาตรฐาน TLS</span></div></div>
+    <div class="chip"><div class="chip-ic">📝</div><div><b>บันทึกกิจกรรม</b><span>ติดตามการใช้งานทุกครั้งแบบเรียลไทม์</span></div></div>
+    <div class="chip"><div class="chip-ic">🔑</div><div><b>จัดการสิทธิ์</b><span>ควบคุมการเข้าถึงแยกตามบทบาท</span></div></div>
+  </div>
+</section>
+
+<!-- ═════════ LOGIN CARD ขวา ═════════ -->
+<section class="panel">
+  <div style="width:min(400px,100%)">
+    <div class="card">
+      <div class="card-logo"><div>DLTV</div></div>
+      <h2>ยินดีต้อนรับ</h2>
+      <p class="hint">กรอกข้อมูลเพื่อเข้าใช้งานระบบจัดการทุนการศึกษา DLTV</p>
+
+      <label for="login-user">อีเมลหรือชื่อผู้ใช้</label>
+      <div class="field">
+        <span class="ic">✉️</span>
+        <input id="login-user" type="text" placeholder="เช่น admin@dltv.ac.th หรือ dltv001" autocomplete="username">
+      </div>
+
+      <label for="login-pass">รหัสผ่าน</label>
+      <div class="field">
+        <span class="ic">🔒</span>
+        <input id="login-pass" type="password" placeholder="••••••••••" autocomplete="current-password">
+        <button type="button" class="eye" id="eye-btn" aria-label="แสดงรหัสผ่าน" title="แสดง/ซ่อนรหัสผ่าน">👁️</button>
+      </div>
+
+      <div class="row">
+        <label class="remember"><input type="checkbox" id="remember" checked>จดจำฉันไว้ในระบบ</label>
+        <a href="#" class="forgot" id="forgot-link">ลืมรหัสผ่าน?</a>
+      </div>
+
+      <button class="btn" id="btn-login">เข้าสู่ระบบ →</button>
+      <div class="err" id="login-err"></div>
+
+      <div class="foot">
+        <div class="contact">ครูผู้ดูแล? <a class="forgot" href="request-code.html">ขอรับรหัสนักเรียนทุน</a></div>
+        <div class="contact">📞 หากพบปัญหาในการใช้งาน ติดต่อผู้ดูแลระบบ</div>
+      </div>
+    </div>
+    <div class="copy">© 2026 DLTV Fund. All rights reserved.</div>
+  </div>
+</section>
+
+<!-- ═════════ Modal ลืมรหัสผ่าน ═════════ -->
+<div class="modal-bg" id="forgot-modal">
+  <div class="modal">
+    <h3>🔑 ลืมรหัสผ่าน</h3>
+    <p>กรอก<b>อีเมล</b>ที่ใช้สมัคร ระบบจะส่งลิงก์ตั้งรหัสผ่านใหม่ไปให้ทางอีเมล<br>
+       <span style="color:#B8860B">บัญชีนักเรียนที่ใช้ชื่อผู้ใช้ (เช่น dltv001) ให้ติดต่อครูผู้ดูแลระบบเพื่อออกรหัสใหม่</span></p>
+    <input id="forgot-email" type="email" placeholder="อีเมลของคุณ">
+    <div class="mmsg" id="forgot-msg"></div>
+    <div class="actions">
+      <button class="mcancel" id="forgot-cancel">ยกเลิก</button>
+      <button class="mok" id="forgot-send">ส่งลิงก์รีเซ็ต</button>
+    </div>
+  </div>
+</div>
+
+<script src="firebase/firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  'use strict';
+  const err = (m) => document.getElementById('login-err').textContent = m || '';
+
+  if (typeof firebase === 'undefined' || !window.FIREBASE_CONFIG) {
+    err('โหลดระบบไม่สำเร็จ — ตรวจอินเทอร์เน็ตและไฟล์ firebase-config.js');
+    return;
+  }
+  firebase.initializeApp(window.FIREBASE_CONFIG);
+  const auth = firebase.auth();
+  const db   = firebase.firestore();
+
+  // ล็อกอินอยู่แล้ว → เข้าแอปเลย
+  auth.onAuthStateChanged(u => { if (u && !window._loggingIn) location.replace('index.html'); });
+
+  /* ---- ตาดูรหัสผ่าน ---- */
+  const passInput = document.getElementById('login-pass');
+  const eyeBtn = document.getElementById('eye-btn');
+  eyeBtn.onclick = () => {
+    const show = passInput.type === 'password';
+    passInput.type = show ? 'text' : 'password';
+    eyeBtn.textContent = show ? '🙈' : '👁️';
+    eyeBtn.setAttribute('aria-label', show ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน');
+  };
+
+  /* ---- เข้าสู่ระบบ ---- */
+  const btn = document.getElementById('btn-login');
+  async function doLogin(){
+    err('');
+    let user = document.getElementById('login-user').value.trim();
+    const pass = passInput.value;
+    if (!user || !pass) { err('กรอกอีเมล/ชื่อผู้ใช้ และรหัสผ่านให้ครบ'); return; }
+
+    btn.disabled = true; btn.textContent = 'กำลังเข้าสู่ระบบ...';
+    window._loggingIn = true;
+    try {
+      // จดจำฉัน: ติ๊ก = จำถาวร / ไม่ติ๊ก = จำเฉพาะแท็บนี้
+      await auth.setPersistence(document.getElementById('remember').checked
+        ? firebase.auth.Auth.Persistence.LOCAL
+        : firebase.auth.Auth.Persistence.SESSION);
+
+      // ถ้าไม่มี @ = ชื่อผู้ใช้ → แปลงเป็นอีเมลผ่านตาราง usernames
+      let username = null;
+      if (user.indexOf('@') === -1) {
+        username = user.toLowerCase();
+        const doc = await db.collection('usernames').doc(username).get();
+        if (!doc.exists) { err('ไม่พบชื่อผู้ใช้นี้ในระบบ'); return; }
+        user = doc.data().email;
+      }
+
+      const cred = await auth.signInWithEmailAndPassword(user, pass);
+
+      // ---- บันทึก log การเข้าระบบ (ใครเข้ามากรอกข้อมูลบ้าง) ----
+      try {
+        let accName = '', accUsername = username || '';
+        const accSnap = await db.collection('accounts').doc(cred.user.uid).get();
+        if (accSnap.exists) {
+          accName = accSnap.data().name || '';
+          accUsername = accSnap.data().username || accUsername;
+        }
+        await db.collection('loginLogs').add({
+          uid: cred.user.uid, email: cred.user.email,
+          username: accUsername, name: accName,
+          at: firebase.firestore.FieldValue.serverTimestamp(),
+          ua: navigator.userAgent.slice(0, 160)
+        });
+      } catch(e) { console.warn('บันทึก log ไม่สำเร็จ:', e.message); }
+
+      location.replace('index.html');
+    } catch (e) {
+      err(({
+        'auth/invalid-credential': 'อีเมล/ชื่อผู้ใช้ หรือรหัสผ่านไม่ถูกต้อง',
+        'auth/user-not-found': 'ไม่พบผู้ใช้นี้ในระบบ',
+        'auth/wrong-password': 'รหัสผ่านไม่ถูกต้อง',
+        'auth/too-many-requests': 'ลองผิดหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่',
+        'auth/network-request-failed': 'เชื่อมต่ออินเทอร์เน็ตไม่ได้',
+      })[e.code] || e.message);
+    } finally {
+      window._loggingIn = false;
+      btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ →';
+    }
+  }
+  btn.onclick = doLogin;
+  passInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('login-user').addEventListener('keydown', e => { if (e.key === 'Enter') passInput.focus(); });
+
+  /* ---- ลืมรหัสผ่าน ---- */
+  const fm = document.getElementById('forgot-modal');
+  const fmsg = document.getElementById('forgot-msg');
+  document.getElementById('forgot-link').onclick = (e) => {
+    e.preventDefault(); fmsg.textContent = ''; fm.classList.add('open');
+    document.getElementById('forgot-email').focus();
+  };
+  document.getElementById('forgot-cancel').onclick = () => fm.classList.remove('open');
+  fm.addEventListener('click', e => { if (e.target === fm) fm.classList.remove('open'); });
+  document.getElementById('forgot-send').onclick = async () => {
+    const email = document.getElementById('forgot-email').value.trim();
+    if (!email || email.indexOf('@') === -1) { fmsg.style.color = '#DC2626'; fmsg.textContent = 'กรอกอีเมลให้ถูกต้อง'; return; }
+    try {
+      await auth.sendPasswordResetEmail(email);
+      fmsg.style.color = '#15803D';
+      fmsg.textContent = '✅ ส่งลิงก์แล้ว — ตรวจกล่องจดหมาย (และถังขยะ/สแปม)';
+    } catch (e) {
+      fmsg.style.color = '#DC2626';
+      fmsg.textContent = e.code === 'auth/user-not-found' ? 'ไม่พบอีเมลนี้ในระบบ' : e.message;
+    }
+  };
+})();
+</script>
+</body>
+</html>
