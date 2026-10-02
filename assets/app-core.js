@@ -7,7 +7,7 @@ let projects = [];
 // ===== CONSTANTS =====
 const S_NAMES = {1:'ยุทธศาสตร์ที่ 1',2:'ยุทธศาสตร์ที่ 2',3:'ยุทธศาสตร์ที่ 3',4:'ยุทธศาสตร์ที่ 4',5:'งบบริหารสำนักงาน'};
 const S_FULL  = {1:'การพัฒนาการจัดการศึกษาทางไกล',2:'การพัฒนาครูและโรงเรียนต้นทาง',3:'การพัฒนาครูและโรงเรียนปลายทาง',4:'การพัฒนาระบบการบริหารจัดการ',5:'งบดำเนินการสำนักงาน'};
-const S_COLORS= {1:'#2456C9',2:'#13865B',3:'#B7791F',4:'#7A4CC2',5:'#52627F'};
+const S_COLORS= {1:'#2F6FD6',2:'#1E8A6E',3:'#C98A12',4:'#8A55C9',5:'#5F7178'};
 const S_BADGE = {1:'badge-s1',2:'badge-s2',3:'badge-s3',4:'badge-s4',5:'badge-s5'};
 const S_KEYS  = [1,2,3,4,5];
 // ── หน่วยนับ ─────────────────────────────────────────────────────────
@@ -539,8 +539,18 @@ function showPage(page, strategyFilter, navEl) {
     if (el) el.style.display = p===page ? 'block' : 'none';
   });
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
-  const activeEl = navEl || (typeof event !== 'undefined' && event && event.currentTarget) || null;
-  if(activeEl) activeEl.classList.add('active');
+  let activeEl = navEl || (typeof event !== 'undefined' && event && event.currentTarget) || null;
+  // ไม่มีปุ่มที่ถูกกด (เช่น เปิดหน้าจากโค้ด) → หาเมนูที่ตรงกับหน้านั้นให้อัตโนมัติ เพื่อให้แถบเมนูแสดงตำแหน่งปัจจุบันเสมอ
+  if(!activeEl || !activeEl.classList || !activeEl.classList.contains('nav-item')){
+    const sf = (strategyFilter===undefined || strategyFilter===null) ? null : String(strategyFilter);
+    activeEl = Array.from(document.querySelectorAll('.nav-item')).find(el=>{
+      const oc = el.getAttribute('onclick')||'';
+      if(oc.indexOf("showPage('"+page+"'")!==0) return false;
+      if(page!=='projects') return true;
+      return sf!==null && oc.indexOf("'"+page+"','"+sf+"'")===9;
+    }) || activeEl;
+  }
+  if(activeEl && activeEl.classList) activeEl.classList.add('active');
 
   const titles = {
     dashboard: ['Dashboard สรุปภาพรวม','รายงานแผนปฏิบัติการประจำปี งบประมาณ พ.ศ. '+currentYear],
@@ -686,15 +696,15 @@ function renderBudgetBar(fp, tb, ts, tp, rem) {
   const poPct     = tb>0 ? Math.max((tp/tb)*100, 0) : 0;
   const remPct    = tb>0 ? Math.max((Math.max(rem,0)/tb)*100, 0) : 100;
   bar.innerHTML = `
-    <div style="width:${spentPct.toFixed(1)}%;background:#13865B;transition:width .6s;min-width:${spentPct>0?2:0}px" title="ใช้ไปแล้ว ${spentPct.toFixed(1)}%"></div>
-    <div style="width:${poPct.toFixed(1)}%;background:#C8961E;transition:width .6s;min-width:${poPct>0?2:0}px" title="PO ผูกพัน ${poPct.toFixed(1)}%"></div>
+    <div style="width:${spentPct.toFixed(1)}%;background:#1E8A6E;transition:width .6s;min-width:${spentPct>0?2:0}px" title="ใช้ไปแล้ว ${spentPct.toFixed(1)}%"></div>
+    <div style="width:${poPct.toFixed(1)}%;background:#E0A21C;transition:width .6s;min-width:${poPct>0?2:0}px" title="PO ผูกพัน ${poPct.toFixed(1)}%"></div>
     <div style="flex:1;background:var(--surface2)"></div>
   `;
   const usedTotal = ts + tp;
   const usedPct = tb>0?((usedTotal/tb)*100).toFixed(1):0;
   leg.innerHTML = `
-    <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#13865B;display:inline-block"></span>ใช้ไปแล้ว <strong>${fmtFull(ts)} บาท</strong> (${spentPct.toFixed(1)}%)</span>
-    <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#C8961E;display:inline-block"></span>PO ผูกพัน <strong>${fmtFull(tp)} บาท</strong> (${poPct.toFixed(1)}%)</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#1E8A6E;display:inline-block"></span>ใช้ไปแล้ว <strong>${fmtFull(ts)} บาท</strong> (${spentPct.toFixed(1)}%)</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#E0A21C;display:inline-block"></span>PO ผูกพัน <strong>${fmtFull(tp)} บาท</strong> (${poPct.toFixed(1)}%)</span>
     <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2);display:inline-block"></span>คงเหลือ <strong style="color:${rem<0?'var(--red)':'var(--text)'}">${fmtFull(rem)} บาท</strong> (${remPct.toFixed(1)}%)</span>
     <span style="margin-left:auto;font-weight:700;color:var(--accent)">รวมเบิกจ่าย+PO: ${usedPct}% จากงบ ${fmtFull(tb)} บาท</span>
   `;
@@ -742,7 +752,7 @@ function renderAllocatedBudgetCard(fp) {
           <div class="metric-label">ยอดรวมงบที่กรอกเข้าระบบ</div>
           <div class="metric-value">${fmtFull(entered)}</div>
           <div class="metric-sub">บาท · คิดเป็น ${usedPct}% ของงบจัดสรร</div>
-          <div class="metric-progress"><div class="metric-progress-track"><div class="metric-progress-fill" style="width:${usedPctClamped}%;background:${over?'#C2362F':'#C8961E'}"></div></div></div>
+          <div class="metric-progress"><div class="metric-progress-track"><div class="metric-progress-fill" style="width:${usedPctClamped}%;background:${over?'#C2412D':'#E0A21C'}"></div></div></div>
         </div>
         <div class="metric-card ${over?'c-red-deep':'c-green-deep'}">
           <div class="metric-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${diffIcon}</svg></div>
@@ -756,7 +766,7 @@ function renderAllocatedBudgetCard(fp) {
         <span style="font-size:11.5px;font-weight:700;color:${over?'var(--red)':'var(--text)'}">${usedPct}%</span>
       </div>
       <div style="height:14px;border-radius:99px;overflow:hidden;background:var(--surface2)">
-        <div style="height:100%;width:${usedPctClamped}%;background:${over?'#C2362F':'#102352'};border-radius:99px;transition:width .6s"></div>
+        <div style="height:100%;width:${usedPctClamped}%;background:${over?'#C2412D':'#0A2F38'};border-radius:99px;transition:width .6s"></div>
       </div>
     </div>
   </div>`;
@@ -858,7 +868,7 @@ function renderCharts(fp) {
       plugins:{
         legend:{display:false},
         tooltip:{
-          backgroundColor:'rgba(11,24,56,.94)', padding:10, cornerRadius:8,
+          backgroundColor:'rgba(6,34,41,.94)', padding:10, cornerRadius:8,
           callbacks:{ label:ctx=>`  ${fmtFull(ctx.parsed)} บาท  (${tb>0?Math.round(ctx.parsed/tb*100):0}%)` },
           bodyFont:chartFont, titleFont:{...chartFont,weight:'700'}
         }
@@ -890,10 +900,10 @@ function renderCharts(fp) {
       labels:['แล้วเสร็จ','กำลังดำเนิน','ยังไม่เริ่ม'],
       datasets:[{
         data:[done,prog,pend],
-        backgroundColor:['#13865B','#2456C9','#C3CAD8'],
+        backgroundColor:['#1E8A6E','#0E6E78','#C9D4D6'],
         borderColor:['#A2CB8B','#F08787','#6D94C5'],
         borderWidth:0, borderRadius:10, borderSkipped:false,
-        hoverBackgroundColor:['#0E6D49','#1A3F9A','#A9B2C3']
+        hoverBackgroundColor:['#16705A','#0A5560','#A9B2C3']
       }]
     },
     options:{
@@ -901,7 +911,7 @@ function renderCharts(fp) {
       plugins:{
         legend:{display:false},
         tooltip:{
-          backgroundColor:'rgba(11,24,56,.94)', padding:10, cornerRadius:8,
+          backgroundColor:'rgba(6,34,41,.94)', padding:10, cornerRadius:8,
           callbacks:{ label:ctx=>`  ${ctx.parsed.y} โครงการ` },
           bodyFont:chartFont, titleFont:{...chartFont,weight:'700'}
         }
@@ -942,7 +952,7 @@ function renderCharts(fp) {
       plugins:{
         legend:{display:false},
         tooltip:{
-          backgroundColor:'rgba(11,24,56,.94)', padding:10, cornerRadius:8,
+          backgroundColor:'rgba(6,34,41,.94)', padding:10, cornerRadius:8,
           callbacks:{ label:ctx=>`  ${fmtFull(ctx.parsed)} บาท` },
           bodyFont:chartFont, titleFont:{...chartFont,weight:'700'}
         }
@@ -991,7 +1001,7 @@ function renderUtilizationChart(fp) {
       plugins:{
         legend:{ position:'bottom', labels:{ font:chartFont, boxWidth:10, padding:16, usePointStyle:true, pointStyle:'circle' } },
         tooltip:{
-          backgroundColor:'rgba(11,24,56,.94)', padding:10, cornerRadius:8,
+          backgroundColor:'rgba(6,34,41,.94)', padding:10, cornerRadius:8,
           callbacks:{
             label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('th-TH')} บาท`,
             afterBody:ctx=>{
@@ -2710,11 +2720,11 @@ document.addEventListener('click', e=>{
 // ===== COMMITTEE SUMMARY =====
 
 const COM_LIST = [
-  { key: 'นโยบายและแผนงาน',           label: 'ด้านนโยบายและแผนงาน',           color: '#2456C9', colorLight: '#EAF0FC', icon: '📋' },
-  { key: 'วิชาการ',                    label: 'ด้านวิชาการ',                   color: '#13865B', colorLight: '#E5F4EC', icon: '📚' },
-  { key: 'เทคนิคและเทคโนโลยีดิจิทัล', label: 'ด้านเทคนิคและเทคโนโลยีดิจิทัล', color: '#B7791F', colorLight: '#FBF2E0', icon: '💻' },
-  { key: 'บริหารงานบุคคล',             label: 'ด้านบริหารงานบุคคล',             color: '#7A4CC2', colorLight: '#F1EBFA', icon: '👥' },
-  { key: 'DLTV Plus',                  label: 'ด้าน DLTV Plus',                color: '#1F7A8C', colorLight: '#E4F2F4', icon: '📡' },
+  { key: 'นโยบายและแผนงาน',           label: 'ด้านนโยบายและแผนงาน',           color: '#2F6FD6', colorLight: '#E8F0FC', icon: '📋' },
+  { key: 'วิชาการ',                    label: 'ด้านวิชาการ',                   color: '#1E8A6E', colorLight: '#E3F3EE', icon: '📚' },
+  { key: 'เทคนิคและเทคโนโลยีดิจิทัล', label: 'ด้านเทคนิคและเทคโนโลยีดิจิทัล', color: '#C98A12', colorLight: '#FCF2DD', icon: '💻' },
+  { key: 'บริหารงานบุคคล',             label: 'ด้านบริหารงานบุคคล',             color: '#8A55C9', colorLight: '#F2ECFA', icon: '👥' },
+  { key: 'DLTV Plus',                  label: 'ด้าน DLTV Plus',                color: '#0E6E78', colorLight: '#E2F2F1', icon: '📡' },
 ];
 // โครงการที่ไม่ถูก assign อนุกรรมการ
 const COM_UNASSIGNED = { key: '__none__', label: 'ไม่ได้ระบุอนุกรรมการ', color: '#7B859B', colorLight: '#F5F7FA', icon: '—' };

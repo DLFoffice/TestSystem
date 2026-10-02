@@ -9,8 +9,10 @@
 <!-- GitHub Pages CDN cache: force reload ด้วย Ctrl+Shift+R หรือเพิ่ม ?v=XXX ใน URL -->
 <title>ระบบรายงาน พ.ศ. 2570 | มูลนิธิการศึกษาทางไกลผ่านดาวเทียม</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20261002T.1">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20261002L.1">
+<!-- ธีม "Lagoon Signal" (ทับธีมหลัก) — ลบบรรทัดนี้ถ้าต้องการกลับไปใช้ธีมน้ำเงินกรมท่า -->
+<link rel="stylesheet" href="assets/theme-lagoon.css?v=20261002L.1">
 </head>
 <body>
 <div class="layout">
@@ -2129,13 +2131,53 @@
 <script src="assets/app-pdf-export.js?v=20260916V.3"></script>
 <!-- ══ AUTH MODAL ══ -->
 <div class="auth-overlay" id="authOverlay">
+  <div class="auth-shell">
+  <aside class="auth-scene" aria-hidden="true">
+    <svg class="auth-scene-art" id="authSceneArt" viewBox="0 0 640 720" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <radialGradient id="authEarthFill" cx="50%" cy="0%" r="75%">
+          <stop offset="0" stop-color="#1D7C86"/><stop offset=".35" stop-color="#0F4C57"/><stop offset="1" stop-color="#061F25"/>
+        </radialGradient>
+        <radialGradient id="authGlow" cx="50%" cy="100%" r="70%">
+          <stop offset="0" stop-color="#2FB3B0" stop-opacity=".35"/><stop offset="1" stop-color="#2FB3B0" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <g class="auth-stars"><circle class="tw" cx="341" cy="87" r="1.6" style="animation-delay:2.60s"/><circle class="tw" cx="84" cy="284" r="0.8" style="animation-delay:1.46s"/><circle class="tw" cx="69" cy="269" r="1" style="animation-delay:0.15s"/><circle class="tw" cx="454" cy="224" r="0.8" style="animation-delay:0.96s"/><circle class="tw" cx="574" cy="227" r="0.8" style="animation-delay:3.31s"/><circle class="tw" cx="136" cy="124" r="0.8" style="animation-delay:2.31s"/><circle class="tw" cx="416" cy="35" r="1" style="animation-delay:0.19s"/><circle class="tw" cx="146" cy="158" r="1.6" style="animation-delay:0.58s"/><circle class="tw" cx="130" cy="302" r="1.2" style="animation-delay:2.24s"/><circle class="tw" cx="195" cy="62" r="1" style="animation-delay:1.49s"/><circle class="tw" cx="570" cy="374" r="0.8" style="animation-delay:2.26s"/><circle class="tw" cx="220" cy="264" r="1.6" style="animation-delay:3.11s"/><circle class="tw" cx="486" cy="309" r="1.6" style="animation-delay:1.45s"/><circle class="tw" cx="264" cy="416" r="1" style="animation-delay:2.80s"/><circle class="tw" cx="259" cy="51" r="1.2" style="animation-delay:2.10s"/><circle class="tw" cx="361" cy="383" r="1.6" style="animation-delay:1.15s"/><circle class="tw" cx="84" cy="70" r="1.6" style="animation-delay:0.66s"/><circle class="tw" cx="360" cy="87" r="1.6" style="animation-delay:1.69s"/><circle class="tw" cx="89" cy="401" r="1.2" style="animation-delay:1.36s"/><circle class="tw" cx="368" cy="314" r="1.6" style="animation-delay:2.32s"/><circle class="tw" cx="477" cy="45" r="0.8" style="animation-delay:3.78s"/><circle class="tw" cx="495" cy="366" r="0.8" style="animation-delay:0.24s"/><circle class="tw" cx="327" cy="341" r="1.6" style="animation-delay:1.14s"/><circle class="tw" cx="405" cy="352" r="1.2" style="animation-delay:0.09s"/><circle class="tw" cx="482" cy="191" r="1" style="animation-delay:2.44s"/><circle class="tw" cx="515" cy="40" r="1" style="animation-delay:3.07s"/><circle class="tw" cx="142" cy="388" r="1" style="animation-delay:1.59s"/><circle class="tw" cx="518" cy="51" r="1" style="animation-delay:1.80s"/><circle class="tw" cx="572" cy="152" r="1" style="animation-delay:3.28s"/><circle class="tw" cx="573" cy="152" r="1.6" style="animation-delay:3.95s"/><circle class="tw" cx="399" cy="128" r="1" style="animation-delay:0.33s"/><circle class="tw" cx="164" cy="128" r="1" style="animation-delay:0.05s"/><circle class="tw" cx="613" cy="103" r="1.2" style="animation-delay:1.13s"/><circle class="tw" cx="159" cy="224" r="1.2" style="animation-delay:2.44s"/><circle class="tw" cx="336" cy="74" r="0.8" style="animation-delay:1.83s"/><circle class="tw" cx="582" cy="210" r="1.6" style="animation-delay:1.60s"/><circle class="tw" cx="116" cy="256" r="1.6" style="animation-delay:0.25s"/><circle class="tw" cx="78" cy="116" r="1.6" style="animation-delay:0.65s"/><circle class="tw" cx="358" cy="317" r="0.8" style="animation-delay:0.41s"/><circle class="tw" cx="590" cy="87" r="0.8" style="animation-delay:3.80s"/><circle class="tw" cx="36" cy="46" r="1" style="animation-delay:2.46s"/><circle class="tw" cx="162" cy="334" r="1.2" style="animation-delay:3.82s"/><circle class="tw" cx="626" cy="196" r="1.6" style="animation-delay:0.49s"/><circle class="tw" cx="509" cy="248" r="1.6" style="animation-delay:1.94s"/><circle class="tw" cx="97" cy="83" r="0.8" style="animation-delay:3.00s"/><circle class="tw" cx="281" cy="255" r="1" style="animation-delay:2.07s"/></g>
+      <g transform="rotate(-8 320 528)">
+        <path class="auth-orbit-back" d="M50 528 a270 70 0 1 0 540 0 a270 70 0 1 0 -540 0" pathLength="1"/>
+        <path id="authOrbitPath" class="auth-orbit" d="M50 528 a270 70 0 1 0 540 0 a270 70 0 1 0 -540 0" pathLength="1"/>
+        <g class="auth-sat">
+          <animateMotion dur="22s" repeatCount="indefinite" rotate="0"><mpath href="#authOrbitPath"/></animateMotion>
+          <circle class="sig" r="6"><animate attributeName="r" values="6;46" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="2.6s" repeatCount="indefinite"/></circle>
+          <circle class="sig" r="6"><animate attributeName="r" values="6;46" dur="2.6s" begin="1.3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="2.6s" begin="1.3s" repeatCount="indefinite"/></circle>
+          <rect class="panel" x="-26" y="-3.5" width="16" height="7" rx="1"/>
+          <rect class="panel" x="10" y="-3.5" width="16" height="7" rx="1"/>
+          <rect class="body" x="-7" y="-6" width="14" height="12" rx="2.5"/>
+          <path class="dish" d="M0 6 v4 M-4 12 q4 4 8 0"/>
+        </g>
+      </g>
+      <circle class="auth-earth" cx="320" cy="1255" r="640" fill="url(#authEarthFill)"/>
+      <circle class="auth-atmo" cx="320" cy="1255" r="646"/>
+      <g class="auth-nodes"><g class="auth-node" style="animation-delay:0.00s"><circle class="ping" cx="-74.0" cy="750.7" r="3" style="animation-delay:0.00s"/><circle class="dot" cx="-74.0" cy="750.7" r="2.6"/></g><g class="auth-node" style="animation-delay:0.45s"><circle class="ping" cx="29.4" cy="684.8" r="3" style="animation-delay:0.45s"/><circle class="dot" cx="29.4" cy="684.8" r="2.6"/></g><g class="auth-node" style="animation-delay:0.90s"><circle class="ping" cx="132.9" cy="643.0" r="3" style="animation-delay:0.90s"/><circle class="dot" cx="132.9" cy="643.0" r="2.6"/></g><g class="auth-node" style="animation-delay:1.35s"><circle class="ping" cx="230.9" cy="621.2" r="3" style="animation-delay:1.35s"/><circle class="dot" cx="230.9" cy="621.2" r="2.6"/></g><g class="auth-node" style="animation-delay:1.80s"><circle class="ping" cx="342.3" cy="615.4" r="3" style="animation-delay:1.80s"/><circle class="dot" cx="342.3" cy="615.4" r="2.6"/></g><g class="auth-node" style="animation-delay:2.25s"><circle class="ping" cx="442.1" cy="626.8" r="3" style="animation-delay:2.25s"/><circle class="dot" cx="442.1" cy="626.8" r="2.6"/></g><g class="auth-node" style="animation-delay:2.70s"><circle class="ping" cx="549.4" cy="657.5" r="3" style="animation-delay:2.70s"/><circle class="dot" cx="549.4" cy="657.5" r="2.6"/></g><g class="auth-node" style="animation-delay:3.15s"><circle class="ping" cx="649.6" cy="706.4" r="3" style="animation-delay:3.15s"/><circle class="dot" cx="649.6" cy="706.4" r="2.6"/></g></g>
+    </svg>
+    <div class="auth-scene-copy">
+      <div class="auth-brand">
+        <span class="auth-brand-logo"><img src="https://dltv.ac.th/upload/data/users/0/316/CMS/images/logo%20dlf%20%E0%B8%AA%E0%B8%A1%E0%B8%9A%E0%B8%B9%E0%B8%A3%E0%B8%93%E0%B9%8C.png" alt=""></span>
+        <span>มูลนิธิการศึกษาทางไกลผ่านดาวเทียม<br>ในพระบรมราชูปถัมภ์</span>
+      </div>
+      <h1 class="auth-hero-title">ระบบรายงานผล<br>แผนปฏิบัติการ</h1>
+      <div class="auth-hero-year"><span>ปีงบประมาณ พ.ศ.</span><strong>2570</strong></div>
+      <p class="auth-hero-note">บันทึกโครงการ รายงานผลรายไตรมาส และติดตามความเสี่ยง ได้ในที่เดียว</p>
+    </div>
+  </aside>
+  <div class="auth-panel">
   <div class="auth-box">
     <div class="auth-logo">
       <div class="auth-logo-icon">
         <img src="https://dltv.ac.th/upload/data/users/0/316/CMS/images/logo%20dlf%20%E0%B8%AA%E0%B8%A1%E0%B8%9A%E0%B8%B9%E0%B8%A3%E0%B8%93%E0%B9%8C.png" alt="Logo" width="44" style="object-fit:contain">
       </div>
-      <div class="auth-logo-title">ระบบรายงานผลการแผนปฏิบัติการ</div>
-      <div class="auth-logo-sub">มูลนิธิการศึกษาทางไกลผ่านดาวเทียม · ปีงบประมาณ พ.ศ. 2570</div>
+      <div class="auth-logo-title">บัญชีผู้ใช้งาน</div>
+      <div class="auth-logo-sub">เข้าสู่ระบบเพื่อบันทึกและแก้ไขรายงาน หรือเข้าชมแบบดูอย่างเดียว</div>
     </div>
 
     <!-- Tabs -->
@@ -2280,19 +2322,31 @@
     </div>
 
   </div><!-- /.auth-box -->
+  </div><!-- /.auth-panel -->
+  </div><!-- /.auth-shell -->
 </div><!-- /.auth-overlay -->
+<script>
+/* หยุดแอนิเมชันฉากดาวเทียมเมื่อหน้า login ปิดอยู่ หรือเมื่อผู้ใช้ตั้งค่าลดการเคลื่อนไหว */
+(function(){
+  var ov=document.getElementById('authOverlay'), art=document.getElementById('authSceneArt');
+  if(!ov||!art||!art.pauseAnimations) return;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function sync(){ (ov.classList.contains('open')&&!reduce)?art.unpauseAnimations():art.pauseAnimations(); }
+  new MutationObserver(sync).observe(ov,{attributes:true,attributeFilter:['class']}); sync();
+})();
+</script>
 
 <!-- ══ Firebase Auth + Firestore ══ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="assets/app-auth-risk.js?v=20260916V.3"></script>
+<script src="assets/app-auth-risk.js?v=20261002L.1"></script>
 
 <!-- app-core.js ต้องโหลดหลังสุด (หลัง app-auth-risk.js) เพราะ initApp() ที่ท้ายไฟล์
      เรียก renderTable() ทันทีตอนโหลดหน้า ซึ่งเรียกใช้ _isEditable() ที่นิยามอยู่ใน
      app-auth-risk.js — ถ้าโหลดก่อนจะเกิด ReferenceError: _isEditable is not defined
      และทำให้โค้ดส่วนที่เหลือใน initApp() (รวมถึงการ sync จาก Google Sheet) ไม่ทำงานเลย -->
-<script src="assets/app-core.js?v=20260916V.3"></script>
+<script src="assets/app-core.js?v=20261002L.1"></script>
 <script src="assets/app-riskregister.js?v=20260916V.3"></script>
 <script src="assets/app-annual-report.js?v=20260923A"></script>
 
